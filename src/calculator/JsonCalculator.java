@@ -6,57 +6,44 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-abstract class IntegerTwoValMathOperation {
-    abstract public Number execute(int val1, int val2);
-};
+interface  IntegerTwoValMathOperation {
+    Number execute(int val1, int val2);
+}
 
-class AddTwoIntegerOperation extends IntegerTwoValMathOperation {
+class AddTwoIntegerOperation implements IntegerTwoValMathOperation {
     public Number execute(int valOne, int valTwo) { return valOne + valTwo; }
-};
+}
 
-class SubTwoIntegerOperation extends IntegerTwoValMathOperation {
+class SubTwoIntegerOperation implements IntegerTwoValMathOperation {
     public Number execute(int valOne, int valTwo) { return valOne - valTwo; }
-};
+}
 
-class MulTwoIntegerOperation extends IntegerTwoValMathOperation {
+class MulTwoIntegerOperation implements IntegerTwoValMathOperation {
     public Number execute(int valOne, int valTwo) { return valOne * valTwo; }
-};
+}
 
-class DivTwoIntegerOperation extends IntegerTwoValMathOperation {
+class DivTwoIntegerOperation implements IntegerTwoValMathOperation {
     public Number execute(int valOne, int valTwo) {
         if (valTwo == 0) throw new ArithmeticException();
-        return Double.valueOf(valOne) / Double.valueOf(valTwo);
+        return (double) valOne / (double) valTwo;
     }
-};
+}
 
 
 public class JsonCalculator {
 
-    public static void main(String[] args) {
-        JsonCalculator jc  = new JsonCalculator();
-        System.out.println("Result: " + jc.processJsonString( "{ \"Cmd\": \"add\", \"val1\": -12, \"val2\": 42 }" ) );
-    }
-
-    private static final Map<String, IntegerTwoValMathOperation> operationsMap = new HashMap<String, IntegerTwoValMathOperation>()
-    {
+    private static final Map<String, IntegerTwoValMathOperation> operationsMap = new HashMap<>() {
         {
             put("add", new AddTwoIntegerOperation());
             put("sub", new SubTwoIntegerOperation());
             put("mul", new MulTwoIntegerOperation());
             put("div", new DivTwoIntegerOperation());
-        };
+        }
     };
 
-
     public Number processJsonString(String jsonString) {
-        JSONObject jsonObject = new JSONObject(jsonString);
-
-        String command = jsonObject.getString("Cmd");
-        IntegerTwoValMathOperation operation = operationsMap.get(command);
-
-        int val1 = jsonObject.getInt("val1");
-        int val2 = jsonObject.getInt("val2");
-
-        return operation.execute(val1, val2);
+        JSONObject jsonObj = new JSONObject(jsonString);
+        IntegerTwoValMathOperation operation = operationsMap.get(jsonObj.getString("Cmd"));
+        return operation.execute(jsonObj.getInt("val1"),  jsonObj.getInt("val2"));
     }
 }

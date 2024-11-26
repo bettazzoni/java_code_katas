@@ -1,6 +1,5 @@
 package calculator;
 
-import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -19,19 +18,17 @@ public class JsonCalculatorTest {
 	public void testNotJsonStrings() {
 		jc.processJsonString("this is not a JSON");
 	}
-    @Test(expected = org.json.JSONException.class)
-    public void testNotValidJsonStrings() {
-        jc.processJsonString("{ }");
-    }
 
     @Test(expected = org.json.JSONException.class)
     public void testBadFormatJsonStrings() {
         jc.processJsonString("{ \"a\" : 21 }");
     }
+
     @Test(expected = org.json.JSONException.class)
     public void testAdd_bad_1st_value() {
         jc.processJsonString( "{ \"Cmd\": \"add\", \"val1\": \"**\", \"val2\": \"1\" }" );
     }
+
     @Test(expected = org.json.JSONException.class)
     public void testAdd_bad_2nd_value() {
         jc.processJsonString( "{ \"Cmd\": \"add\", \"val1\": \"-12\", \"val2\": \"bad\" }" );
@@ -41,8 +38,8 @@ public class JsonCalculatorTest {
     public void testAdd() {
         assertEquals(42, jc.processJsonString( "{ \"Cmd\": \"add\", \"val1\": 11, \"val2\": 31 }" )) ;
     }
-    @Test
 
+    @Test
     public void testAdd_JSON_not_ordered() {
         assertEquals(50, jc.processJsonString( "{ \"val2\": \"3\", \"Cmd\": \"add\", \"val1\": \"47\",  }" )) ;
     }
@@ -64,6 +61,6 @@ public class JsonCalculatorTest {
 
     @Test(expected = ArithmeticException.class)
     public void testDiv_divisionBy0() {
-        jc.processJsonString( "{ \"Cmd\": \"div\", \"val1\": \"1\", \"val2\": \"0\" }" ) ;
+        jc.processJsonString( "{ \"Cmd\": \"div\", \"val1\": 1, \"val2\": \"0\" }" ) ;
     }
 }
