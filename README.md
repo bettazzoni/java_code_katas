@@ -1,8 +1,5 @@
 # java_katas
 
-# python_katas
-
-
 ## Classic code katas in java
 A simple directory where build & run my katas.
 
@@ -18,7 +15,6 @@ openjdk 11.0.13 + junit-4.13.22 + json-201401072 (but, please, check-it, maybe I
 
 
 Thanks to [cyber dojo](https://cyber-dojo.org/) for kata descriptions, and to be "_a place to practice programming_"
-
 
 ---
 ### Alarm clock
