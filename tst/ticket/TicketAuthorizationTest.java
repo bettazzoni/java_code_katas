@@ -1,4 +1,4 @@
-package validationticket;
+package ticket;
 
 import org.json.JSONObject;
 import org.junit.Test;
@@ -9,14 +9,14 @@ import java.time.format.DateTimeFormatter;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
-class DateHelper{
+class DateTimeHelper {
     static String toString(ZonedDateTime zdt) {
         return zdt.format(DateTimeFormatter.ISO_ZONED_DATE_TIME);
     }
     static String buildTestJSON(String name, String auth, ZonedDateTime startTime, ZonedDateTime endTime) {
         return "{ \"name\": \"" + name + "\" , \"authorization\": \"" + auth + "\", \"start_date\": \"" +
-                DateHelper.toString(startTime) + "\", \"end_date\": \"" +
-                DateHelper.toString(endTime)  + "\" }";
+                DateTimeHelper.toString(startTime) + "\", \"end_date\": \"" +
+                DateTimeHelper.toString(endTime)  + "\" }";
     }
 }
 
@@ -27,18 +27,18 @@ public class TicketAuthorizationTest {
     ZonedDateTime TIME_NOW_MINUS_10_SEC = TIME_NOW.minusSeconds(10);
 
     @Test(expected = org.json.JSONException.class)
-    public void testNotJsonStrings() {
+    public void testNotValidJson() {
         TicketAuthorization.validateTicket(new JSONObject(""));
     }
 
     @Test
-    public void test_no_empty_JSON() {
+    public void test_Empty_JSON() {
         JSONObject ticketJson = new JSONObject("{}");
         assertFalse(TicketAuthorization.validateTicket(ticketJson));
     }
 
     @Test
-    public void test_okay_1() {
+    public void functional_test_okay_time_hard_coded() {
         String ticketJsonString = """
        { "name": "JohnDoe",  "authorization": "Auth_JohnDoe",
           "start_date": "2024-01-01T08:00:00+01:00",
@@ -50,7 +50,7 @@ public class TicketAuthorizationTest {
 
     @Test
     public void test_okay_2() {
-        String ticketJsonString = DateHelper.buildTestJSON("JohnDoe", "Auth_JohnDoe",
+        String ticketJsonString = DateTimeHelper.buildTestJSON("JohnDoe", "Auth_JohnDoe",
                 TIME_NOW_MINUS_10_SEC, TIME_NOW_PLUS_10_SEC);
         JSONObject ticketJson = new JSONObject(ticketJsonString);
         assertTrue(TicketAuthorization.validateTicket(ticketJson));
@@ -60,15 +60,15 @@ public class TicketAuthorizationTest {
     public void test_no_name() {
         String ticketJsonString = """
         {   "authorization": "Auth_JohnDoe",
-            "start_date":""" + " \"" + DateHelper.toString(TIME_NOW_MINUS_10_SEC) + "\"," + """
-            "end_date":""" + " \"" + DateHelper.toString(TIME_NOW_PLUS_10_SEC) + "\" }";
+            "start_date":""" + " \"" + DateTimeHelper.toString(TIME_NOW_MINUS_10_SEC) + "\"," + """
+            "end_date":""" + " \"" + DateTimeHelper.toString(TIME_NOW_PLUS_10_SEC) + "\" }";
         JSONObject ticketJson = new JSONObject(ticketJsonString);
         assertFalse(TicketAuthorization.validateTicket(ticketJson));
     }
 
     @Test
     public void test_bad_name() {
-        String ticketJsonString = DateHelper.buildTestJSON("", "Auth_",
+        String ticketJsonString = DateTimeHelper.buildTestJSON("", "Auth_",
                 TIME_NOW_MINUS_10_SEC, TIME_NOW_PLUS_10_SEC);
         JSONObject ticketJson = new JSONObject(ticketJsonString);
         assertFalse(TicketAuthorization.validateTicket(ticketJson));
@@ -78,15 +78,15 @@ public class TicketAuthorizationTest {
     public void test_no_authorization() {
         String ticketJsonString = """
         {   "name": "JohnDoe",
-            "start_date":""" + " \"" + DateHelper.toString(TIME_NOW_MINUS_10_SEC) + "\"," + """
-            "end_date":""" + " \"" + DateHelper.toString(TIME_NOW_PLUS_10_SEC) + "\" }";
+            "start_date":""" + " \"" + DateTimeHelper.toString(TIME_NOW_MINUS_10_SEC) + "\"," + """
+            "end_date":""" + " \"" + DateTimeHelper.toString(TIME_NOW_PLUS_10_SEC) + "\" }";
         JSONObject ticketJson = new JSONObject(ticketJsonString);
         assertFalse(TicketAuthorization.validateTicket(ticketJson));
     }
 
     @Test
     public void test_bad_authorization() {
-        String ticketJsonString = DateHelper.buildTestJSON("JohnDoe", "Auth_XXXXXXX",
+        String ticketJsonString = DateTimeHelper.buildTestJSON("JohnDoe", "Auth_XXXXXXX",
                 TIME_NOW_MINUS_10_SEC, TIME_NOW_PLUS_10_SEC);
         JSONObject ticketJson = new JSONObject(ticketJsonString);
         assertFalse(TicketAuthorization.validateTicket(ticketJson));
