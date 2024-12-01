@@ -18,8 +18,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.logging.Logger;
 
-public class TicketAuthorization {
-    private static final Logger log =  Logger.getLogger(TicketAuthorization.class.getName());
+public class JSONTicketAuthorization {
+    private static final Logger log =  Logger.getLogger(JSONTicketAuthorization.class.getName());
 
     public static boolean validateTicket(JSONObject ticketJson) {
         log.info("enter validation ticket");

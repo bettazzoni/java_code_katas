@@ -20,7 +20,7 @@ class DateTimeHelper {
     }
 }
 
-public class TicketAuthorizationFunctionalTest {
+public class JSONTicketAuthorizationFunctionalTest {
     ZonedDateTime TIME_NOW = ZonedDateTime.now();
     ZonedDateTime TIME_NOW_PLUS_10_SEC = TIME_NOW.plusSeconds(10);
     ZonedDateTime TIME_NOW_MINUS_10_SEC = TIME_NOW.minusSeconds(10);
@@ -34,7 +34,7 @@ public class TicketAuthorizationFunctionalTest {
           "end_date": "2024-12-31T18:00:00+01:00" }
        """;
         JSONObject ticketJson = new JSONObject(ticketJsonString);
-        assertTrue(TicketAuthorization.validateTicket(ticketJson));
+        assertTrue(JSONTicketAuthorization.validateTicket(ticketJson));
     }
 
     // WARNING can fail on slow or very busy machine
@@ -43,7 +43,7 @@ public class TicketAuthorizationFunctionalTest {
         String ticketJsonString = DateTimeHelper.buildTestJSON("JohnDoe", "Auth_JohnDoe",
                 TIME_NOW_MINUS_10_SEC, TIME_NOW_PLUS_10_SEC);
         JSONObject ticketJson = new JSONObject(ticketJsonString);
-        assertTrue(TicketAuthorization.validateTicket(ticketJson));
+        assertTrue(JSONTicketAuthorization.validateTicket(ticketJson));
     }
 
     @Test
@@ -53,7 +53,7 @@ public class TicketAuthorizationFunctionalTest {
             "start_date":""" + " \"" + DateTimeHelper.toString(TIME_NOW_MINUS_10_SEC) + "\"," + """
             "end_date":""" + " \"" + DateTimeHelper.toString(TIME_NOW_PLUS_10_SEC) + "\" }";
         JSONObject ticketJson = new JSONObject(ticketJsonString);
-        assertFalse(TicketAuthorization.validateTicket(ticketJson));
+        assertFalse(JSONTicketAuthorization.validateTicket(ticketJson));
     }
 
     @Test
@@ -61,7 +61,7 @@ public class TicketAuthorizationFunctionalTest {
         String ticketJsonString = DateTimeHelper.buildTestJSON("", "Auth_",
                 TIME_NOW_MINUS_10_SEC, TIME_NOW_PLUS_10_SEC);
         JSONObject ticketJson = new JSONObject(ticketJsonString);
-        assertFalse(TicketAuthorization.validateTicket(ticketJson));
+        assertFalse(JSONTicketAuthorization.validateTicket(ticketJson));
     }
 
     @Test
@@ -71,7 +71,7 @@ public class TicketAuthorizationFunctionalTest {
             "start_date":""" + " \"" + DateTimeHelper.toString(TIME_NOW_MINUS_10_SEC) + "\"," + """
             "end_date":""" + " \"" + DateTimeHelper.toString(TIME_NOW_PLUS_10_SEC) + "\" }";
         JSONObject ticketJson = new JSONObject(ticketJsonString);
-        assertFalse(TicketAuthorization.validateTicket(ticketJson));
+        assertFalse(JSONTicketAuthorization.validateTicket(ticketJson));
     }
 
     @Test
@@ -79,7 +79,7 @@ public class TicketAuthorizationFunctionalTest {
         String ticketJsonString = DateTimeHelper.buildTestJSON("JohnDoe", "Auth_XXXXXXX",
                 TIME_NOW_MINUS_10_SEC, TIME_NOW_PLUS_10_SEC);
         JSONObject ticketJson = new JSONObject(ticketJsonString);
-        assertFalse(TicketAuthorization.validateTicket(ticketJson));
+        assertFalse(JSONTicketAuthorization.validateTicket(ticketJson));
     }
     @Test
     public void test_no_stat_date() {
@@ -88,7 +88,7 @@ public class TicketAuthorizationFunctionalTest {
           "end_date": "2024-12-31T18:00:00+01:00" }
        """;
         JSONObject ticketJson = new JSONObject(ticketJsonString);
-        assertFalse(TicketAuthorization.validateTicket(ticketJson));
+        assertFalse(JSONTicketAuthorization.validateTicket(ticketJson));
     }
 
     @Test
@@ -98,6 +98,6 @@ public class TicketAuthorizationFunctionalTest {
           "start_date": "2024-01-01T08:00:00+01:00"  }
        """;
         JSONObject ticketJson = new JSONObject(ticketJsonString);
-        assertFalse(TicketAuthorization.validateTicket(ticketJson));
+        assertFalse(JSONTicketAuthorization.validateTicket(ticketJson));
     }
 }
